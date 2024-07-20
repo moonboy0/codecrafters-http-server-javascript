@@ -24,13 +24,13 @@ const server = net.createServer((socket) => {
                 url : arrayRequest[1],
                 HTTPVersion : arrayRequest[2].slice(0,arrayRequest[2].indexOf("\r")),
                 headers : {
-                    userAgent : header.filter(key => key.includes("User-Agent"))[0].split("User-Agent: ")[1]
+                    userAgent : header.filter(key => key.includes("User-Agent") || "User-Agent : Empty")[0].split("User-Agent: ")[1]
                 }
             }
             console.log(request)
             handleRoutes.validateRoutes(request , response , socket)
         }catch(e) {
-            
+
         }
     })
   
