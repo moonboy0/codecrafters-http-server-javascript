@@ -16,15 +16,15 @@ const server = net.createServer((socket) => {
     socket.on("data" , (data) => {
         let dataString = data.toString() 
         const arrayRequest = dataString.split(" ")
-        console.log(arrayRequest)
-
+        const arrayHeader = dataString.split("\r\n")
+        const header = arrayHeader.splice(2 , arrayHeader.length - 1)
         const request = {
             method : arrayRequest[0],
             url : arrayRequest[1],
             HTTPVersion : arrayRequest[2].slice(0,arrayRequest[2].indexOf("\r")),
-            host : arrayRequest[3].slice(0,arrayRequest[3].indexOf("\r")),
-            userAgent : arrayRequest[5].slice(0,arrayRequest[5].indexOf("\r"))
-
+            headers : {
+                userAgent : header.filter(key => key.includes("User-Agent"))[0].split(":")[1]
+            }
         }
         console.log(request)
         handleRoutes.validateRoutes(request , response , socket)
