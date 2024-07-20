@@ -25,9 +25,8 @@ const routes = [
     {
     path : "/echo/{txt}" ,
     execute : (request, response , socket) => {
-        console.log(request.param)
+        console.log(request)
         socket.write(`HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${request.param[0].length}\r\n\r\n${request.param[0]}`)
-        
         } ,
     method : "GET"
     },
@@ -35,7 +34,7 @@ const routes = [
     {
     path : "/user-agent" ,
     execute : (request ,response ,socket) => {
-        socket.write(`HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${request.headers.userAgent.length - 1}\r\n\r\n${request.headers.userAgent}`)
+        socket.write(`HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${request.headers.userAgent.length }\r\n\r\n${request.headers.userAgent}`)
     } ,
     method : "GET"
     }

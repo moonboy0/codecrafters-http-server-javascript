@@ -35,7 +35,7 @@ class Routes {
                         let paramArray = request.url.split(arrayOfURL[0].path)
 
                         request.param = paramArray.splice(1, paramArray.length - 1)
-
+                        console.log(request.param)
                         return arrayOfURL[1].execute(request , response , socket)
                     } else {
                         return arrayOfURL[1].execute(request , response , socket)
