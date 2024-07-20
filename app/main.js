@@ -23,8 +23,7 @@ const server = net.createServer((socket) => {
             url : arrayRequest[1],
             HTTPVersion : arrayRequest[2].slice(0,arrayRequest[2].indexOf("\r")),
             host : arrayRequest[3].slice(0,arrayRequest[3].indexOf("\r")),
-            userAgent : arrayRequest[4].slice(0,arrayRequest[4].indexOf("\r")),
-
+            userAgent : arrayRequest[5].slice(0,arrayRequest[5].indexOf("\r"))
 
         }
         console.log(request)
