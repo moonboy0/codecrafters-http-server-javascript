@@ -23,14 +23,27 @@ const routes = [
     },
 
     {
-        path : "/echo/{txt}" ,
-        execute : (request, response , socket) => {
-            console.log(request.param)
-            socket.write(`HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${request.param.length}\r\n\r\n${request.param}`)
+    path : "/echo/{txt}" ,
+    execute : (request, response , socket) => {
+        console.log(request.param)
+        socket.write(`HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${request.param[0].length}\r\n\r\n${request.param[0]}`)
+        
         } ,
-        method : "GET"
+    method : "GET"
     },
 
+    {
+    path : "/user-agent" ,
+    execute : (request ,response ,socket) => {
+        socket.write(`HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${request.userAgent.length}\r\n\r\n${request.userAgent}`)
+    } ,
+    method : "GET"
+    }
+
+
+    
+
+   
     
    
 ]

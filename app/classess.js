@@ -3,6 +3,8 @@
  * u need to add another thing to your routes options and that's method !! 
  * maybe somebody want to have a same route for diffrent methods! 
  * so implment that too ! 
+ * 
+ * dude it's done ! 
  */
 
 
@@ -29,9 +31,15 @@ class Routes {
                     const arrayOfURL = this.routes.filter(route => route.path.includes(routeA.path))
                     if(arrayOfURL.length > 2) throw new Error("you enabled dyanmic and 404 at the same time and that's not possible ! ")
 
-                    request.param = request.url.split(arrayOfURL[0].path)[1]
+                    if(arrayOfURL[1].path.indexOf("{") != -1) {
+                        let paramArray = request.url.split(arrayOfURL[0].path)
 
-                    return arrayOfURL[1].execute(request , response , socket)
+                        request.param = paramArray.splice(1, paramArray.length - 1)
+
+                        return arrayOfURL[1].execute(request , response , socket)
+                    } else {
+                        return arrayOfURL[1].execute(request , response , socket)
+                    }
                 }
             }
 
