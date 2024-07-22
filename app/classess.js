@@ -7,8 +7,8 @@
  * dude it's done ! 
  */
 
-
-
+const fs = require("fs")
+const path = require("path")
 class Routes {
     constructor(routes = []) { 
         if(routes.length < 0) {
@@ -33,9 +33,21 @@ class Routes {
 
                     if(arrayOfURL[1].path.indexOf("{") != -1) {
                         let paramArray = request.url.split(arrayOfURL[0].path)
-
+                        if(arrayOfURL[1].path.startsWith("/files/")) {
+                            if(!request.dirr) {
+                                throw new Error("you did'nt give program any dirr for this route ! ")
+                            }
+                            request.fileName = paramArray.splice(1, paramArray.length - 1)
+                           
+                            if(!fs.existsSync(path.join(request.dirr , request.fileName[0]))) {
+                                const responseText = "can't find the file!"
+                                console.log(request)
+                                return socket.write(`HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\nContent-Length: ${responseText.length}\r\n\r\n${responseText}`)
+                            }
+                            request.file = fs.readFileSync(path.join(request.dirr , request.fileName[0]) )
+                            return arrayOfURL[1].execute(request , response , socket)
+                        }
                         request.param = paramArray.splice(1, paramArray.length - 1)
-                        console.log(request.param)
                         return arrayOfURL[1].execute(request , response , socket)
                     } else {
                         return arrayOfURL[1].execute(request , response , socket)

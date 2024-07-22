@@ -7,6 +7,12 @@ const routes = require("./routes");
 console.log("server is running !")
 
 const handleRoutes = new Routes(routes)
+let hasDirr ;
+const getArgv = process.argv.slice(2)
+
+const getDir = getArgv.filter((arg) => !arg.startsWith("--"))[0]
+
+
 
 
 
@@ -14,7 +20,6 @@ const server = net.createServer((socket) => {
     const response = new Response()
     //when somebody uses browser or even curl this function gonna get called !
     socket.on("data" , (data) => {
-        try{
             let dataString = data.toString() 
             const arrayRequest = dataString.split(" ")
             const arrayHeader = dataString.split("\r\n")
@@ -24,16 +29,17 @@ const server = net.createServer((socket) => {
                 url : arrayRequest[1],
                 HTTPVersion : arrayRequest[2].slice(0,arrayRequest[2].indexOf("\r")),
                 headers : {
-                    userAgent : header.filter(key => key.includes("User-Agent") || "User-Agent : Empty")[0].split("User-Agent: ")[1]
-                }
+                    userAgent : header.filter(key => key.includes("User-Agent") || "User-Agent: Empty")[0].split("User-Agent: ")[1] 
+                },
+                dirr : getDir || false
             }
-            console.log(request)
             handleRoutes.validateRoutes(request , response , socket)
-        }catch(e) {
-
-        }
+        
     })
   
 });
 
 server.listen(4221, "localhost");
+
+
+
