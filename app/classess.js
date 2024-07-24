@@ -28,9 +28,8 @@ class Routes {
                 if(request.url.includes(routeA.path)) {
                     if(routeA.path == "/") continue;
                     
-                    const arrayOfURL = this.routes.filter(route => route.path.includes(routeA.path))
-                    if(arrayOfURL.length > 2) throw new Error("you enabled dyanmic and 404 at the same time and that's not possible ! ")
-
+                    const arrayOfURL = this.routes.filter(route => route.path.includes(routeA.path) && route.method == request.method)
+                    console.log(arrayOfURL)
                     if(arrayOfURL[1].path.indexOf("{") != -1) {
                         let paramArray = request.url.split(arrayOfURL[0].path)
                         if(arrayOfURL[1].path.startsWith("/files/")) {
@@ -39,12 +38,11 @@ class Routes {
                             }
                             request.fileName = paramArray.splice(1, paramArray.length - 1)
                            
-                            if(!fs.existsSync(path.join(request.dirr , request.fileName[0]))) {
+                            if(!fs.existsSync(path.join(request.dirr , request.fileName[0])) && request.method == "GET") {
                                 const responseText = "can't find the file!"
-                                console.log(request)
                                 return socket.write(`HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\nContent-Length: ${responseText.length}\r\n\r\n${responseText}`)
                             }
-                            request.file = fs.readFileSync(path.join(request.dirr , request.fileName[0]) )
+                            if(request.method == "GET") request.file = fs.readFileSync(path.join(request.dirr , request.fileName[0]) )
                             return arrayOfURL[1].execute(request , response , socket)
                         }
                         request.param = paramArray.splice(1, paramArray.length - 1)

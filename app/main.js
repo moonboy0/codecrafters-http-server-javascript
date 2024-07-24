@@ -31,8 +31,10 @@ const server = net.createServer((socket) => {
                 headers : {
                     userAgent : header.filter(key => key.includes("User-Agent") || "User-Agent: Empty")[0].split("User-Agent: ")[1] 
                 },
-                dirr : getDir || false
+                dirr : getDir || false,
+                data : header[header.length - 1] || ""
             }
+            
             handleRoutes.validateRoutes(request , response , socket)
         
     })
